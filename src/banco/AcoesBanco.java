@@ -10,12 +10,16 @@ import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 import cliente.Cliente;
+import menu.Menu;
 public class AcoesBanco {
 
 	private Connection connection;	//para tentar utilizar com o PreparedStatement
+	private Menu menu;
+	
 	public AcoesBanco()
 	{
 		this.connection = new ConexaoBanco().GetConection();
+		this.menu = new Menu();
 	}
 	
 	public void InserirRegistro(Cliente c)  throws ClassNotFoundException, SQLException{
@@ -28,48 +32,12 @@ public class AcoesBanco {
 		conn.ConectarBanco(sql, 1);		
 		conn.FechaConexao();
 		System.out.println("Registro inserido com sucesso.\n\n");
+		menu.BoasVindas();
 	}
 	
-	
-	public void BuscarCliente(Connection conn) throws SQLException{
 		
-		Statement stmt = null;
-		String sql ="SELECT nome,telefone FROM contato ORDER BY nome ASC";
-		
-		stmt = (Statement) conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-		
-		
-		while(rs.next())
-		{
-			//Retrieve by column name
-			String nome_temp = rs.getString("nome");
-			String tel_temp = rs.getString("telefone");
-			//Display values
-			System.out.print("nome: " + nome_temp+" ");
-			System.out.print(", tel: " + tel_temp);
-			System.out.println();
-		}
-		rs.close();		
-	}
-	
-	
-	//altera apenas nome	Funcionando
-	public void updateRegistroNome(int id, String novoNome) throws ClassNotFoundException, SQLException{
-		String sql;
-		ConexaoBanco conn = new ConexaoBanco();		
-			
-		sql = "UPDATE contato SET nome='"+novoNome+"' WHERE id='"+id+"'";
-		System.out.println("registro alterado com sucesso.");
-		conn.ConectarBanco(sql, 1);		
-		conn.FechaConexao();
-			
-	}
-	
-	
-	//deleta pelo numero de telefone	Funcionando	
+	//3-deleta pelo numero de telefone	Funcionando	
 	public void DeletaFone(String numeroFOne) throws ClassNotFoundException, SQLException{
-		
 		String sql;
 		ConexaoBanco conn = new ConexaoBanco();		
 		
@@ -77,11 +45,14 @@ public class AcoesBanco {
 				+ "WHERE telefone = '"+numeroFOne+"'";			
 		conn.ConectarBanco(sql, 1);		
 		conn.FechaConexao();
+		
+		System.out.println("Contato deletado com sucesso.\n\n");
+		menu.BoasVindas();
 	}
 
 
 	// 4- altera por um numero de telefone		funcionando
-	public void AlteraPorTelefone(Cliente c){
+	public void AlteraPorTelefone(Cliente c) throws ClassNotFoundException{
 		
 		String sql = "UPDATE contato set nome=?, telefone=?"
 				+"WHERE telefone=?";
@@ -94,34 +65,68 @@ public class AcoesBanco {
 			
 			stmt.execute();
 			stmt.close();
-			System.out.println("Registro alterado com sucesso.");
+			System.out.println("Registro alterado com sucesso.\n\n");
+			menu.BoasVindas();
 		}catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+		
+		
 	}
 
 
-	public void ListaContato(String nomeBuscado){
+	//2-Lista um contato especifico 
+	public void ListaContatoEspecifico(String nomeBuscado) throws ClassNotFoundException{
 		
 		try{			
 			PreparedStatement stmt = (PreparedStatement) this.connection.
 					prepareStatement("select nome, telefone from contato WHERE nome="+nomeBuscado);
 			
 			ResultSet rs = stmt.executeQuery();
-			while(rs.next())
-			{
-				//Retrieve by column name
-				String nome_temp = rs.getString("nome");
-				String tel_temp = rs.getString("telefone");
-				//Display values
-				System.out.print("nome: " + nome_temp+" ");
-				System.out.print(", tel: " + tel_temp);
-				System.out.println();
+			
+			//if verificando se existe valor encontrado
+			if (!rs.isBeforeFirst() ) {    
+			    System.out.println("Não foram encontrados registro como "+nomeBuscado +""); 
+			    menu.BoasVindas();
+			}else{
+				while (rs.next()) {				
+					  String nome = rs.getString("nome");
+					  String telefone = rs.getString("telefone");			  
+					  System.out.println(nome + " :: " + telefone);
+					}
+				rs.close();		
+				stmt.close();
+				
+				menu.BoasVindas();
 			}
-			rs.close();		
-			stmt.close();
+			
 		}catch (SQLException e){
 	         throw new RuntimeException(e);
 	     }		
+	}
+	
+	//Lista todos os contatos do banco.
+	public void ListaTodosContatos() throws ClassNotFoundException
+	{
+		String sql = "SELECT * FROM contato";		
+		try
+		{
+			PreparedStatement stmt = (PreparedStatement) this.connection.prepareStatement(sql);
+			
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next())
+			{
+				String nome = rs.getString("nome");
+				String telefone = rs.getString("telefone");				  
+				System.out.println(nome + " :: " + telefone);
+			}
+			
+			System.out.println("\nListagem completa.\n\n");
+			rs.close();		
+			stmt.close();			
+			menu.BoasVindas();
+		}catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

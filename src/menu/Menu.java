@@ -16,7 +16,9 @@ public class Menu {
 	 */
 
 	public void BoasVindas() throws ClassNotFoundException, SQLException {
-		System.out.println("Nós da Focus3d lhes deseja um bom dia");
+		System.out.println("****************************************************\n");
+		System.out.println("--------------------- Bom dia ----------------------\n");
+		System.out.println("****************************************************\n");
 		ChamaMenuFuncoes();
 	}
 
@@ -27,11 +29,13 @@ public class Menu {
 		Cliente novoCliente = new Cliente();
 		Scanner lt = new Scanner(in);	
 		
-		System.out.println("Escolhe a opção desejada\n1-Registrar Novo contato"
-				+ "\n2-Para buscar um contato e seus dados pelo seu nome"
-				+ "\n3-Para deletar um contato"
-				+ "\n4-Para alterar os dados de um contato existente."
-				+ "\n5-Sair do programa\n\n");
+		System.out.println("Escolha a opção desejada\n\n1-Para registrar Novo contato\n"
+				+ "\n2-Para buscar um contato\n"
+				+ "\n3-Para deletar um contato\n"
+				+ "\n4-Para alterar os dados de um contato existente.\n"
+				+ "\n5-Para listar todos os contatos.\n"
+				+ "\n6-Sair do programa\n");
+		System.out.println("****************************************************\n");
 		qualAcao = lt.nextInt();
 		
 		switch (qualAcao) {
@@ -41,6 +45,8 @@ public class Menu {
 			acoesBanco.InserirRegistro(novoCliente);			
 			break;
 		case 2:
+			String nomeBuscado = novoCliente.pedeNomeParaBusca();
+			acoesBanco.ListaContatoEspecifico(nomeBuscado);
 			break;
 		case 3:
 			novoCliente.DeletaNumeroFone();
@@ -48,7 +54,15 @@ public class Menu {
 			novoCliente.AlteraPeloTelefone();
 			acoesBanco.AlteraPorTelefone(novoCliente);
 			break;
-
+		case 5:
+			acoesBanco.ListaTodosContatos();
+			break;
+		case 6:
+			System.out.println("Programa Finalizado.");
+			System.out.println("****************************************************\n");
+			System.out.println("--------------------- Até breve --------------------\n");
+			System.out.println("****************************************************\n");
+			break;
 		default:
 			break;
 		}

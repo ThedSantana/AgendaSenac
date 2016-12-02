@@ -59,4 +59,10 @@ public class Cliente {
 		telefone = lt.nextLine();
 		return telefone;
 	}
+	
+	public String pedeNomeParaBusca(){
+		System.out.println("Digite nome desejado: ");
+		String nome = "'"+lt.nextLine()+"'";
+		return nome;
+	}
 }

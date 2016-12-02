@@ -52,6 +52,7 @@ public class Menu {
 			novoCliente.DeletaNumeroFone();
 		case 4:
 			novoCliente.AlteraPeloTelefone();
+			//String qualTelefone = novoCliente.pedeTelefoneParaBusca();
 			acoesBanco.AlteraPorTelefone(novoCliente);
 			break;
 		case 5:

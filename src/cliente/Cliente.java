@@ -65,4 +65,11 @@ public class Cliente {
 		String nome = "'"+lt.nextLine()+"'";
 		return nome;
 	}
+	
+	public String pedeTelefoneParaBusca(){
+		System.out.println("Digite Telefone desejado ----: ");
+		String nome = lt.nextLine();
+		System.out.println(nome);
+		return nome;
+	}
 }

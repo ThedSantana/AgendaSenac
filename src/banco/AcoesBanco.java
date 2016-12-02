@@ -61,7 +61,7 @@ public class AcoesBanco {
 			
 			stmt.setString(1, c.getNome());
 			stmt.setString(2, c.getTelefone());
-			stmt.setString(3, c.QualTelefone());
+			stmt.setString(3, c.getTelefone());			//c.getTelefone()
 			
 			stmt.execute();
 			stmt.close();
@@ -69,9 +69,7 @@ public class AcoesBanco {
 			menu.BoasVindas();
 		}catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		
-		
+		}	
 	}
 
 

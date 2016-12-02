@@ -17,7 +17,7 @@ public class ConexaoBanco {
 		
 		//3° usuário e senha do banco
 		final String USER = "root";
-		final String PASS = "";			//"Well#28081984";
+		final String PASS = "Well#28081984";			//"Well#28081984";
 				
 		Class.forName("com.mysql.jdbc.Driver");
 		
@@ -36,7 +36,8 @@ public class ConexaoBanco {
 	public Connection GetConection(){
 		try
 		{
-			return  DriverManager.getConnection("jdbc:mysql://localhost/AgendaSenac?autoReconeect=true&useSSL=false", "root",""); //"Well#28081984";
+			return  DriverManager.getConnection("jdbc:mysql://localhost/AgendaSenac?"
+					+ "autoReconeect=true&useSSL=false", "root","Well#28081984"); //"Well#28081984";
 		}catch(SQLException e){
 			throw new RuntimeException(e);
 		}
